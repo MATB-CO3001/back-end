@@ -1,17 +1,16 @@
 package com.matb.ordering.api.models.entities
 
+import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.matb.ordering.api.models.ActivityState
 import com.matb.ordering.api.models.entities.base.BaseEntity
-import javax.persistence.CascadeType
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.OneToMany
+import org.hibernate.criterion.Order
+import javax.persistence.*
 
 @Entity
 data class Vendor (
     var name: String = "",
-    var email: String = "",
     var state: ActivityState? = null,
-    @OneToMany(mappedBy = "vendor", cascade = arrayOf(CascadeType.ALL), fetch = FetchType.EAGER)
-    var food: Set<Food> = HashSet()
+    @JsonManagedReference
+    @OneToMany(mappedBy = "vendor")
+    var food: List<Food>? = null
 ) : BaseEntity()

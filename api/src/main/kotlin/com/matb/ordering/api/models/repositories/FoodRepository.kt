@@ -1,6 +1,5 @@
 package com.matb.ordering.api.models.repositories
 
-import com.matb.ordering.api.models.OrderState
 import com.matb.ordering.api.models.entities.Food
 import com.matb.ordering.api.models.entities.Vendor
 import org.springframework.data.jpa.repository.JpaRepository

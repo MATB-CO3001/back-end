@@ -7,11 +7,7 @@ import javax.persistence.*
 
 @Entity
 data class CartItem(
-    @JsonManagedReference
-    @OneToOne @JoinColumn(name = "food_id")
-    var food: Food? = null,
+    var foodId: Int = 0,
     var quantity: Int = 0,
-    @JsonBackReference
-    @ManyToOne @JoinColumn(name = "cart_id")
-    var cart: Cart? = null
+    var cartId: Int = 0
 ) : BaseEntity()

@@ -11,11 +11,7 @@ data class Food(
     var name: String = "",
     var price: Int = 0,
     var image: String = "",
-    @JsonBackReference
-    @OneToOne(mappedBy = "food")
-    var cartItem: CartItem? = null,
-    @JsonBackReference
-    @ManyToOne @JoinColumn(name = "vendor_id")
-    var vendor: Vendor? = null
+    @JsonIgnore
+    var vendorId: Int = 0
 ) : BaseEntity()
 

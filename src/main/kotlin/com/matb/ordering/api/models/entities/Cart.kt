@@ -10,8 +10,5 @@ data class Cart(
     var total: Int = 0,
     var customerId: Int = 0,
     var vendorId: Int = 0,
-    var cartState: CartState? = null,
-    @JsonManagedReference
-    @OneToMany(mappedBy = "cart")
-    var cartItem: List<CartItem>? = null
+    var cartState: CartState? = null
 ) : BaseEntity()

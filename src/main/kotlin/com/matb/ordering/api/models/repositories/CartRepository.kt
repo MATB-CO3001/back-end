@@ -6,6 +6,6 @@ import com.matb.ordering.api.models.entities.Cart
 import org.springframework.data.jpa.repository.JpaRepository
 
 @Repository
-interface OrdersRepository : JpaRepository<Cart, Int>{
+interface CartRepository : JpaRepository<Cart, Int>{
     fun findAllByCartState(cartState: CartState): List<Cart>
 }

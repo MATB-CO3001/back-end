@@ -9,8 +9,5 @@ import javax.persistence.*
 @Entity
 data class Vendor (
     var name: String = "",
-    var state: ActivityState? = null,
-    @JsonManagedReference
-    @OneToMany(mappedBy = "vendor")
-    var food: List<Food>? = null
+    var state: ActivityState? = null
 ) : BaseEntity()

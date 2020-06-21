@@ -10,5 +10,5 @@ data class Cart(
     var total: Int = 0,
     var customerId: Int = 0,
     var vendorId: Int = 0,
-    var cartState: CartState? = null
+    var state: CartState? = null
 ) : BaseEntity()

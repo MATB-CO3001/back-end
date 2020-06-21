@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 @Repository
 interface CartRepository : JpaRepository<Cart, Int>{
-    fun findAllByCartState(cartState: CartState): List<Cart>
+    fun findAllByState(cartState: CartState): List<Cart>
+    fun findAllByVendorId(vendorId: Int): List<Cart>
 }

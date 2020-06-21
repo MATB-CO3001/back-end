@@ -35,14 +35,8 @@ class VendorController(private val vendorRepository: VendorRepository, private v
         food.vendorId = vendorId
         return ResponseEntity(foodRepository.save(food), HttpStatus.OK)
     }
+
     @GetMapping("/vendor")
-    fun getAllVendor(): ResponseEntity<List<Vendor>>{
-        return ResponseEntity(
-                vendorRepository.findAll(),
-                HttpStatus.OK
-        )
-    }
-/*    @GetMapping("/vendor")
     fun getAllVendor(): ResponseEntity<List<VendorResponse>>{
         return ResponseEntity(
                 vendorRepository.findAll().map {
@@ -50,5 +44,5 @@ class VendorController(private val vendorRepository: VendorRepository, private v
                 },
                 HttpStatus.OK
         )
-    }*/
+    }
 }

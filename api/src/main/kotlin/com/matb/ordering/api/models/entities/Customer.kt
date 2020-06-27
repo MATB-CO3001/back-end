@@ -1,9 +1,10 @@
 package com.matb.ordering.api.models.entities
 
 import com.matb.ordering.api.models.entities.base.BaseEntity
+import com.matb.ordering.api.models.entities.base.BaseUserEntity
 import javax.persistence.Entity
 
 @Entity
-class Customer (
-    var userName: String = ""
-) : BaseEntity()
+data class Customer (
+    var balance: Int = 0
+) : BaseUserEntity()

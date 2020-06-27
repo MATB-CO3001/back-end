@@ -6,3 +6,6 @@ enum class ActivityState{
 enum class CartState{
     PENDING, INPROGRESS, READY, DONE, REJECTED
 }
+enum class RoleState {
+    ROLE_CUSTOMER, ROLE_CHEF, ROLE_VENDOR
+}

@@ -6,5 +6,9 @@ import javax.persistence.Entity
 
 @Entity
 data class Customer (
-    var balance: Int = 0
-) : BaseUserEntity()
+        var username: String = "",
+        var password: String = "",
+        var email: String = "",
+        var token: String = "",
+        var role: Role? = null
+) : BaseEntity()

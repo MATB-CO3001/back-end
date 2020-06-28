@@ -1,7 +1,15 @@
 package com.matb.ordering.api.configs
 
 import org.springframework.context.annotation.Configuration
+import org.springframework.web.servlet.config.annotation.CorsRegistry
+import org.springframework.web.servlet.config.annotation.EnableWebMvc
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+
 
 @Configuration
-class WebConfiguration {
+@EnableWebMvc
+class WebConfiguration: WebMvcConfigurer {
+    override fun addCorsMappings(registry: CorsRegistry) {
+        registry.addMapping("/**")
+    }
 }

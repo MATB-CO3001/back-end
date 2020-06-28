@@ -55,10 +55,10 @@ class CustomerController (
         if (!encoder.matches(loginRequest.password, customer.password)) {
             return ResponseEntity("Password wrong", HttpStatus.FORBIDDEN)
         }
-        if (customer.token == "") {
+        //if (customer.token == "") {
             customer.token = jwtUtils.generateJwtToken(customer)
             customerRepository.save(customer)
-        }
+        //}
         return ResponseEntity(customer.toJwtResponse(),HttpStatus.OK)
     }
 }

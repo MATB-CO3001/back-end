@@ -9,16 +9,16 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/chef")
 class ChefController (
         private val cartRepository: CartRepository
 ){
-    @GetMapping("/vendor/{id}/chef")
-    fun getAllPendingCart(@PathVariable (value = "id") cartId: Int): ResponseEntity<List<Cart>> {
-        return ResponseEntity(cartRepository.findAllByVendorIdAndState(cartId, CartState.PENDING), HttpStatus.OK)
+    @GetMapping("/{vendorId}")
+    fun getAllPendingCart(@PathVariable (value = "vendorId") vendorId: Int): ResponseEntity<List<Cart>> {
+        return ResponseEntity(cartRepository.findAllByVendorIdAndState(vendorId, CartState.PENDING), HttpStatus.OK)
     }
 
-    @PostMapping("/vendor/chef")
+    @PostMapping
     fun updateCartState(@RequestBody cartStateUpdatingRequest: CartStateUpdatingRequest): Cart {
         val newUpdatedStateCart = cartRepository.findById(cartStateUpdatingRequest.cartId).get()
         newUpdatedStateCart.state = cartStateUpdatingRequest.newState

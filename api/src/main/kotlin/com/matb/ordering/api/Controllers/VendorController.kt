@@ -12,15 +12,15 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/vendor")
 class VendorController(private val vendorRepository: VendorRepository, private val foodRepository: FoodRepository){
-    @PostMapping("/vendor")
+    @PostMapping
     fun createVendor(@RequestBody vendor: Vendor) : ResponseEntity<Vendor>{
         vendor.state = ActivityState.ACTIVE
         return ResponseEntity(vendorRepository.save(vendor), HttpStatus.OK)
     }
 
-    @GetMapping("/vendor/{id}")
+    @GetMapping("/{id}")
     fun getVendorById(@PathVariable(value = "id") vendorId: Int): ResponseEntity<VendorResponse>{
         var vendor = vendorRepository.findAllById(vendorId)
         return ResponseEntity(
@@ -30,13 +30,13 @@ class VendorController(private val vendorRepository: VendorRepository, private v
                 HttpStatus.OK)
     }
 
-    @PostMapping("/vendor/{id}")
+    @PostMapping("/{id}")
     fun createFood(@PathVariable (value = "id") vendorId: Int, @RequestBody food: Food): ResponseEntity<Food> {
         food.vendorId = vendorId
         return ResponseEntity(foodRepository.save(food), HttpStatus.OK)
     }
 
-    @GetMapping("/vendor")
+    @GetMapping
     fun getAllVendor(): ResponseEntity<List<VendorResponse>>{
         return ResponseEntity(
                 vendorRepository.findAll().map {

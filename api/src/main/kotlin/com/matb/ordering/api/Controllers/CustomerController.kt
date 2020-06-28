@@ -36,10 +36,10 @@ class CustomerController (
     @PostMapping("/signup")
     fun regiterCustomer(@RequestBody signupRequest: SignupRequest) : ResponseEntity<Any> {
         if (customerRepository.existsByUsername(signupRequest.username)){
-            return ResponseEntity(Error("Username is already taken!"), HttpStatus.OK)
+            return ResponseEntity("Username is already taken!", HttpStatus.CONFLICT)
         }
         if (customerRepository.existsByUsername(signupRequest.email)){
-            return ResponseEntity(Error("Email is already taken!"), HttpStatus.OK)
+            return ResponseEntity("Email is already taken!", HttpStatus.CONFLICT)
         }
 
         return ResponseEntity(customerRepository.save(signupRequest.toCustomer(encoder.encode(signupRequest.password))), HttpStatus.OK)

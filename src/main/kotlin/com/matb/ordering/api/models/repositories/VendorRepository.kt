@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository
 interface VendorRepository: JpaRepository<Vendor, Int>{
     fun findAllById(vendorId: Int) : Vendor
     fun findByName(vendorName: String) : Vendor
+    fun existsByUsername(username: String): Boolean
 }

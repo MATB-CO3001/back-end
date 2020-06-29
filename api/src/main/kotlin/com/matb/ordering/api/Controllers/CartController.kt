@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.*
 import java.lang.RuntimeException
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/cart")
 class CartController(
     private val cartRepository: CartRepository,
     private val cartItemRepository: CartItemRepository,
     private val foodRepository: FoodRepository
 ) {
 
-    @PostMapping("/cart")
+    @PostMapping
     fun createCart(@RequestBody cartCreationRequest: CartCreationRequest): String {
         var cart = Cart(
                 0,
@@ -35,20 +35,6 @@ class CartController(
         }
         cartRepository.save(temporarySavedCart)
         return "Successfully order"
-    }
-
-    @GetMapping("/{id}/report")
-    fun getAllCartByVendorId(@PathVariable (value = "id") vendorId: Int): ResponseEntity<List<Cart>> {
-        val cartList = cartRepository.findAllByVendorId(vendorId);
-        if (cartList.isEmpty()) {
-            throw RuntimeException()
-        }
-        return ResponseEntity(cartList, HttpStatus.OK)
-    }
-
-    @GetMapping("/cart/pending")
-    fun getAllPendingCart(): ResponseEntity<List<Cart>> {
-        return ResponseEntity(cartRepository.findAllByState(CartState.PENDING), HttpStatus.OK)
     }
 
 }

@@ -54,7 +54,7 @@ class WebSecurityConfig @Autowired constructor(
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
 
         http.addFilterBefore(AuthTokenFilter(), UsernamePasswordAuthenticationFilter::class.java)

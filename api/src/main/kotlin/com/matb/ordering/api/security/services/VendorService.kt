@@ -9,14 +9,14 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class CustomerService (private val customerRepository: CustomerRepository) : UserDetailsService {
+class VendorService (private val vendorRepository: CustomerRepository) : UserDetailsService {
 
     @Transactional
     override fun loadUserByUsername(username: String): UserDetails {
-        val customer = customerRepository.findByUsername(username)
-        if (!customer.isPresent) {
+        val vendor = vendorRepository.findByUsername(username)
+        if (!vendor.isPresent) {
             throw UsernameNotFoundException("User Not Found with username: " + username)
         }
-        return customer.get().toCustomerDetails()
+        return vendor.get().toCustomerDetails()
     }
 }

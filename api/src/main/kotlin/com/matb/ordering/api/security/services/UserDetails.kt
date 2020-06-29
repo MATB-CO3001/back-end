@@ -1,19 +1,16 @@
 package com.matb.ordering.api.security.services
 
-import com.matb.ordering.api.models.entities.Role
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.AuthorityUtils
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
-import sun.security.util.Password
 
-class CustomerDetails(
+class UserDetails(
         username: String,
-        password: String
+        password: String,
+        var role: String
 ): UserDetails {
     override fun getAuthorities(): Collection<out GrantedAuthority> {
-        return AuthorityUtils.createAuthorityList("ROLE_USER")
+        return AuthorityUtils.createAuthorityList(role)
     }
 
     override fun isEnabled(): Boolean {

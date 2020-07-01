@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/vendor")
 class VendorController(private val vendorRepository: VendorRepository, private val foodRepository: FoodRepository){
     @PostMapping
-    fun createVendor(@RequestBody vendor: Vendor) : ResponseEntity<Vendor>{
+    fun createVendor(@RequestBody vendor: Vendor) : ResponseEntity<Any>{
+        if (vendorRepository.existsByUsername(vendor.username)){
+            return ResponseEntity("Username is already taken!", HttpStatus.CONFLICT)
+        }
         vendor.state = ActivityState.ACTIVE
         return ResponseEntity(vendorRepository.save(vendor), HttpStatus.OK)
     }
@@ -35,6 +38,28 @@ class VendorController(private val vendorRepository: VendorRepository, private v
         food.vendorId = vendorId
         return ResponseEntity(foodRepository.save(food), HttpStatus.OK)
     }
+
+    @PostMapping("/{id}/update")
+    fun updateVendor(@PathVariable (value = "id") vendorId: Int, @RequestBody vendor: Vendor): ResponseEntity<Vendor> {
+        var vendorCur = vendorRepository.findById(vendorId).get()
+        vendorCur.name = vendor.name
+        return ResponseEntity(vendorRepository.save(vendorCur), HttpStatus.OK)
+    }
+    @PostMapping("/{foodId}/update")
+    fun updateFood(@PathVariable (value = "foodId") foodId: Int, @RequestBody food: Food): ResponseEntity<Food> {
+        var foodCur = foodRepository.findById(foodId).get()
+        if (food.name != "") {
+            foodCur.name = food.name
+        }
+        if (food.price != 0) {
+            foodCur.price = food.price
+        }
+        if (food.image != "") {
+            foodCur.image = food.image
+        }
+        return ResponseEntity(foodRepository.save(food), HttpStatus.OK)
+    }
+
 
     @GetMapping
     fun getAllVendor(): ResponseEntity<List<VendorResponse>>{

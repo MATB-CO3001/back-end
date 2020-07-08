@@ -16,11 +16,12 @@ import org.springframework.web.bind.annotation.*
 class VendorController(private val vendorRepository: VendorRepository, private val foodRepository: FoodRepository){
     @PostMapping
     fun createVendor(@RequestBody vendor: Vendor) : ResponseEntity<Any>{
-        if (vendorRepository.existsByUsername(vendor.username)){
-            return ResponseEntity("Username is already taken!", HttpStatus.CONFLICT)
-        }
-        vendor.state = ActivityState.ACTIVE
-        return ResponseEntity(vendorRepository.save(vendor), HttpStatus.OK)
+//        if (vendorRepository.existsByUsername(vendor.username)){
+//            return ResponseEntity("Username is already taken!", HttpStatus.CONFLICT)
+//        }
+//        vendor.state = ActivityState.ACTIVE
+//        return ResponseEntity(vendorRepository.save(vendor), HttpStatus.OK)
+        return ResponseEntity("àdll", HttpStatus.CONFLICT)
     }
 
     @GetMapping("/{id}")
@@ -35,7 +36,7 @@ class VendorController(private val vendorRepository: VendorRepository, private v
 
     @PostMapping("/{id}")
     fun createFood(@PathVariable (value = "id") vendorId: Int, @RequestBody food: Food): ResponseEntity<Food> {
-        food.vendorId = vendorId
+        //food.vendorId = vendorId
         return ResponseEntity(foodRepository.save(food), HttpStatus.OK)
     }
 

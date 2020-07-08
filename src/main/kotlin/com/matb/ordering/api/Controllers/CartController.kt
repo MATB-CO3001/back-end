@@ -29,8 +29,8 @@ class CartController(
         )
         var temporarySavedCart = cartRepository.save(cart)
         for (cartItem in cartCreationRequest.orderedFoodList) {
-            cartItem.cartId = temporarySavedCart.id!!
-            temporarySavedCart.total += foodRepository.findById(cartItem.foodId).get().price * cartItem.quantity
+            //cartItem.cartId = temporarySavedCart.id!!
+            //temporarySavedCart.total += foodRepository.findById(cartItem.foodId).get().price * cartItem.quantity
             cartItemRepository.save(cartItem)
         }
         cartRepository.save(temporarySavedCart)

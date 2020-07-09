@@ -8,14 +8,14 @@ import javax.persistence.*
 
 @Entity
 data class Food(
-    var name: String = "",
-    var price: Int = 0,
-    var image: String = "",
-    @JsonBackReference
-    @ManyToOne @JoinColumn(name = "vendor_id")
-    var vendor: Vendor? = null,
-    @JsonBackReference
-    @OneToOne @JoinColumn(name = "food_id")
-    var cartItem: CartItem? = null
+        @ManyToOne @JoinColumn(name = "vendor_id", referencedColumnName = "id")
+        @JsonBackReference
+        var vendor: Vendor? = null,
+        var name: String = "",
+        var price: Int = 0,
+        var image: String = "",
+        @JsonBackReference
+        @OneToOne @JoinColumn(name = "food_id")
+        var cartItem: CartItem? = null
 ) : BaseEntity()
 

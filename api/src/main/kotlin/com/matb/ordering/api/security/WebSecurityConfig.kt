@@ -45,9 +45,7 @@ class WebSecurityConfig @Autowired constructor(
     }
 
     @Bean
-    fun passwordEncoder(): PasswordEncoder? {
-        return BCryptPasswordEncoder()
-    }
+    fun bCryptPasswordEncoder() = BCryptPasswordEncoder()
 
     override fun configure(http: HttpSecurity) {
         http.cors().and().csrf().disable()

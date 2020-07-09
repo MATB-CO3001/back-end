@@ -10,7 +10,7 @@ data class Chef (
     var username: String = "",
     @JsonIgnore
     var password: String = "",
-    var vendorId: Int = 0,
+    var vendor: String = "",
     @JsonIgnore
     var role: String = "ROLE_CHEF"
 ) : BaseUserEntity()

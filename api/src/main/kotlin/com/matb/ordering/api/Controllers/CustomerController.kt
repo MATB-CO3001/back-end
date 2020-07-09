@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.*
 
@@ -20,14 +21,13 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/auth")
 
 class CustomerController (
+        private val encoder: BCryptPasswordEncoder,
         private val customerRepository: CustomerRepository
 ) {
     @Autowired
     lateinit var authenticationManager: AuthenticationManager
     @Autowired
     lateinit var jwtUtils: JwtUtils
-    @Autowired
-    lateinit var encoder:PasswordEncoder
 
     @GetMapping("/test")
     @PreAuthorize("hasRole('USER')")

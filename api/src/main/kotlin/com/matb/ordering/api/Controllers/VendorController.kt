@@ -41,9 +41,9 @@ class VendorController(
     }
 
     @GetMapping("/{username}")
-    fun getVendorById(@PathVariable(name = "username", required = true) username: String): ResponseEntity<Vendor>{
+    fun getVendorByUsername(@PathVariable(name = "username", required = true) username: String): ResponseEntity<VendorResponse>{
         return ResponseEntity(
-                vendorRepository.findByUsername(username).get(),
+                vendorRepository.findByUsername(username).get().toVendorResponse(),
                 HttpStatus.OK)
     }
 
@@ -62,7 +62,7 @@ class VendorController(
 
     @DeleteMapping("/{username}")
     fun deleteVendor(@PathVariable(name = "username", required = true) username: String) : ResponseEntity<Void> {
-        foodRepository.deleteAllByVendor(username)
+        foodRepository.deleteAllByVendor(vendorRepository.findByUsername(username).get())
         vendorRepository.deleteByUsername(username)
         return ResponseEntity(HttpStatus.OK)
     }
@@ -77,6 +77,7 @@ class VendorController(
                 foodRepository.save(
                         foodRequest.toFood(vendor.get())), HttpStatus.OK)
     }
+
     @PutMapping("/food/{id}")
     fun updateFood(
             @PathVariable (value = "id") foodId: Int,
@@ -94,6 +95,7 @@ class VendorController(
         foodRepository.deleteById(foodId)
         return ResponseEntity(HttpStatus.OK)
     }
+
     @PostMapping("/{username}/createall")
     fun createAllFood(
             @PathVariable(name = "username", required = true) username: String,

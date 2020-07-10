@@ -21,7 +21,8 @@ fun VendorRequest.toVendor() = Vendor(
 fun Vendor.toVendorResponse() = VendorResponse(
         state = state,
         name = name,
-        foodList = foodList
+        foodList = foodList,
+        username = username
 )
 fun FoodRequest.toFood(vendor: Vendor) = Food(
         vendor = vendor,

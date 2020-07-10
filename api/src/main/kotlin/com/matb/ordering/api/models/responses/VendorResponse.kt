@@ -6,5 +6,6 @@ import com.matb.ordering.api.models.entities.Food
 class VendorResponse (
     val name: String,
     val state: ActivityState?,
-    val foodList: List<Food>?
+    val foodList: List<Food>?,
+    val username: String = ""
 )

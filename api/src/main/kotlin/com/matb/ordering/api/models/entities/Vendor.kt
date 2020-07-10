@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.matb.ordering.api.models.ActivityState
 import com.matb.ordering.api.models.entities.base.BaseUserEntity
+import javax.persistence.CascadeType
 import javax.persistence.Entity
 import javax.persistence.OneToMany
 
@@ -16,7 +17,7 @@ data class Vendor (
         var password: String = "",
         var state: ActivityState? = null,
         @JsonManagedReference
-        @OneToMany(mappedBy = "vendor")
+        @OneToMany(mappedBy = "vendor", orphanRemoval = true)
         var foodList: List<Food>? = null,
         @JsonIgnore
         var role: String = ""

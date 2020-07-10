@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.web.bind.annotation.*
+import javax.transaction.Transactional
 
 @RestController
 @RequestMapping("/api/vendor")
@@ -61,9 +62,8 @@ class VendorController(
     }
 
     @DeleteMapping("/{username}")
-    fun deleteVendor(@PathVariable(name = "username", required = true) username: String) : ResponseEntity<Void> {
-        foodRepository.deleteAllByVendor(vendorRepository.findByUsername(username).get())
-        vendorRepository.deleteByUsername(username)
+    fun deleteVendor(@PathVariable(name = "username") username: String) : ResponseEntity<Void> {
+        vendorRepository.deleteById(vendorRepository.findByUsername(username).get().id!!)
         return ResponseEntity(HttpStatus.OK)
     }
 
@@ -87,6 +87,7 @@ class VendorController(
             return ResponseEntity("Food not found", HttpStatus.NOT_FOUND)
         }
         var foodUpdate = foodRequest.toFood(food.get().vendor!!)
+        foodUpdate.id = foodId
         return ResponseEntity(foodRepository.save(foodUpdate), HttpStatus.OK)
     }
 

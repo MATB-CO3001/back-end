@@ -15,11 +15,14 @@ class ChefController (
         private val cartRepository: CartRepository,
         private val chefRepository: ChefRepository
 ){
-    @GetMapping("/{username}")
+    @GetMapping("/{username}/pending")
     fun getAllPendingCart(@PathVariable (value = "username") username: String): ResponseEntity<List<Cart>> {
-//        var chef = chefRepository.findByUsername(username).get()
-        var stateList = setOf(CartState.PENDING, CartState.INPROGRESS)
-        return ResponseEntity(cartRepository.findAllByVendorAndStateIn(username, stateList), HttpStatus.OK)
+        return ResponseEntity(cartRepository.findAllByVendorAndState(username, CartState.PENDING), HttpStatus.OK)
+    }
+
+    @GetMapping("/{username}/inprogress")
+    fun getAllInprogressCart(@PathVariable (value = "username") username: String): ResponseEntity<List<Cart>> {
+        return ResponseEntity(cartRepository.findAllByVendorAndState(username, CartState.INPROGRESS), HttpStatus.OK)
     }
 
     @PostMapping

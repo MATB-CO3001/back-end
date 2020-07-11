@@ -11,4 +11,5 @@ interface CartRepository : JpaRepository<Cart, Int>{
     fun findAllByState(cartState: CartState): List<Cart>
     fun findAllByVendor(vendor: String): List<Cart>
     fun findAllByVendorAndStateIn(vendor: String, cartState: Set<CartState>): List<Cart>
+    fun findAllByVendorAndState(username: String, cartState: CartState): List<Cart>
 }

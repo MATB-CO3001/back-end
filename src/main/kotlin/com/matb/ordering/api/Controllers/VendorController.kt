@@ -88,8 +88,11 @@ class VendorController(
         }
         var foodUpdate = foodRequest.toFood(food.get().vendor!!)
         foodUpdate.id = foodId
+        foodUpdate.state = foodRequest.state
         return ResponseEntity(foodRepository.save(foodUpdate), HttpStatus.OK)
     }
+
+
 
     @DeleteMapping("/food/{id}")
     fun deleteFood(@PathVariable(value = "id") foodId: Int): ResponseEntity<Void> {

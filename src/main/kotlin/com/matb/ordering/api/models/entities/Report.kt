@@ -1,5 +1,6 @@
 package com.matb.ordering.api.models.entities
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import com.matb.ordering.api.models.entities.base.BaseEntity
 import java.time.LocalDate
@@ -13,5 +14,6 @@ class Report (
         var total: Int = 0,
         @JsonManagedReference
         @OneToMany(mappedBy = "report", orphanRemoval = true)
-        var reportList: List<ReportItem>? = null
+        var reportList: List<ReportItem>? = null,
+        var vendor: String = ""
 ) : BaseEntity()

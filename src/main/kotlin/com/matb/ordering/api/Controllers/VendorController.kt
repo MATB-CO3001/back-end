@@ -124,6 +124,6 @@ class VendorController(
     ):ResponseEntity<List<Report>> {
         var startDate = LocalDate.parse(yearmonth+"-01")
         var endDate = startDate.plusDays(startDate.lengthOfMonth().toLong()-1)
-        return ResponseEntity(reportRepository.findAllByDateBetween(startDate,endDate), HttpStatus.OK)
+        return ResponseEntity(reportRepository.findAllByVendorAndDateBetween(username,startDate,endDate), HttpStatus.OK)
     }
 }

@@ -4,6 +4,7 @@ import com.matb.ordering.api.models.CartState
 import com.matb.ordering.api.models.entities.Cart
 import com.matb.ordering.api.models.entities.Report
 import com.matb.ordering.api.models.entities.ReportItem
+import com.matb.ordering.api.models.entities.Vendor
 import com.matb.ordering.api.models.repositories.CartRepository
 import com.matb.ordering.api.models.repositories.ChefRepository
 import com.matb.ordering.api.models.repositories.ReportItemRepository
@@ -38,23 +39,26 @@ class ChefController (
         val newUpdatedStateCart = cartRepository.findById(cartStateUpdatingRequest.cartId).get()
         newUpdatedStateCart.state = cartStateUpdatingRequest.newState
 
-        var date = LocalDate.now(ZoneId.of("GMT+07:00"))
-        var report: Report
-        if (reportRepository.existsByDate(date)) {
-            report = reportRepository.findByDate(date).get()
-        } else {
-            report = reportRepository.save(Report(date,0))
-        }
-        var reportItem: ReportItem
-        for (item in newUpdatedStateCart.cartItem!!){
-            if (reportItemRepository.existsByReportAndFood(report,item.food!!)) {
-                reportItem = reportItemRepository.findByReportAndFood(report,item.food!!).get()
+        if (newUpdatedStateCart.state == CartState.DONE) {
+            var date = LocalDate.now(ZoneId.of("GMT+07:00"))
+            var report: Report
+            if (reportRepository.existsByVendorAndDate(newUpdatedStateCart.vendor,date)) {
+                report = reportRepository.findByVendorAndDate(newUpdatedStateCart.vendor,date).get()
             } else {
-                reportItem = reportItemRepository.save(ReportItem(item.food!!,report))
+                report = reportRepository.save(Report(date,0,null,newUpdatedStateCart.vendor))
             }
-            reportItem.quantity+=item.quantity;
+            var reportItem: ReportItem
+            for (item in newUpdatedStateCart.cartItem!!){
+                if (reportItemRepository.existsByReportAndFood(report,item.food!!)) {
+                    reportItem = reportItemRepository.findByReportAndFood(report,item.food!!).get()
+                } else {
+                    reportItem = reportItemRepository.save(ReportItem(item.food!!,report))
+                }
+                reportItem.quantity+=item.quantity;
+            }
+            report.total+=newUpdatedStateCart.total
         }
-        report.total+=newUpdatedStateCart.total
+
         return ResponseEntity(cartRepository.save(newUpdatedStateCart), HttpStatus.OK)
     }
 }

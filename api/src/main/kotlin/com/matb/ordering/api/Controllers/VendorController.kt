@@ -1,8 +1,10 @@
 package com.matb.ordering.api.Controllers
 
 import com.matb.ordering.api.models.entities.Food
+import com.matb.ordering.api.models.entities.Report
 import com.matb.ordering.api.models.entities.Vendor
 import com.matb.ordering.api.models.repositories.FoodRepository
+import com.matb.ordering.api.models.repositories.ReportRepository
 import com.matb.ordering.api.models.repositories.VendorRepository
 import com.matb.ordering.api.models.requests.creation.FoodRequest
 import com.matb.ordering.api.models.requests.creation.VendorRequest
@@ -10,10 +12,13 @@ import com.matb.ordering.api.models.responses.VendorResponse
 import com.matb.ordering.api.models.toFood
 import com.matb.ordering.api.models.toVendor
 import com.matb.ordering.api.models.toVendorResponse
+import org.apache.tomcat.jni.Local
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
+import java.time.YearMonth
 import javax.transaction.Transactional
 
 @RestController
@@ -21,7 +26,8 @@ import javax.transaction.Transactional
 class VendorController(
         private val encoder: BCryptPasswordEncoder,
         private val vendorRepository: VendorRepository,
-        private val foodRepository: FoodRepository
+        private val foodRepository: FoodRepository,
+        private val reportRepository: ReportRepository
 ){
 
     @PostMapping
@@ -110,5 +116,14 @@ class VendorController(
             ResponseEntity(foodRepository.save(item.toFood(vendor)), HttpStatus.OK)
         }
         return "All foods have been created :')"
+    }
+
+    @GetMapping("/report/{username}/{yearmonth}")
+    fun getReport(@PathVariable(name = "username", required = true) username: String,
+                  @PathVariable(name = "yearmonth", required = true) yearmonth: String
+    ):ResponseEntity<List<Report>> {
+        var startDate = LocalDate.parse(yearmonth+"-01")
+        var endDate = startDate.plusDays(startDate.lengthOfMonth().toLong()-1)
+        return ResponseEntity(reportRepository.findAllByDateBetween(startDate,endDate), HttpStatus.OK)
     }
 }

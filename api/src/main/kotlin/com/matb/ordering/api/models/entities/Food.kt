@@ -17,7 +17,10 @@ data class Food(
         var image: String = "",
         var state: FoodState? = null,
         @JsonBackReference
-        @OneToOne @JoinColumn(name = "food_id")
-        var cartItem: CartItem? = null
+        @OneToOne
+        var cartItem: CartItem? = null,
+        @JsonBackReference
+        @OneToOne
+        var reportItem: ReportItem? = null
 ) : BaseEntity()
 

@@ -8,7 +8,7 @@ import javax.persistence.*
 @Entity
 data class CartItem(
     @JsonManagedReference
-    @OneToOne
+    @OneToOne @JoinColumn(name = "food_id")
     var food: Food? = null,
     @JsonBackReference
     @ManyToOne @JoinColumn(name = "cart_id")

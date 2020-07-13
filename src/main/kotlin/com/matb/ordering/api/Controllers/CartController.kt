@@ -44,5 +44,11 @@ class CartController(
         var stateList = setOf(CartState.DONE)
         return ResponseEntity(cartRepository.findAllByVendorAndStateIn(username, stateList), HttpStatus.OK)
     }
+    @GetMapping("/customer/{username}")
+    fun getAllCarByCustomer(@PathVariable (value = "username") username: String): ResponseEntity<List<Cart>> {
+        return ResponseEntity(cartRepository.findAllByCustomer(username), HttpStatus.OK)
+    }
+
+
 
 }

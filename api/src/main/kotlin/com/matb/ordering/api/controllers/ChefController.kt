@@ -1,14 +1,11 @@
-package com.matb.ordering.api.Controllers
+package com.matb.ordering.api.controllers
 
+import com.matb.ordering.api.exceptions.UserNotFoundException
 import com.matb.ordering.api.models.CartState
 import com.matb.ordering.api.models.entities.Cart
 import com.matb.ordering.api.models.entities.Report
 import com.matb.ordering.api.models.entities.ReportItem
-import com.matb.ordering.api.models.entities.Vendor
-import com.matb.ordering.api.models.repositories.CartRepository
-import com.matb.ordering.api.models.repositories.ChefRepository
-import com.matb.ordering.api.models.repositories.ReportItemRepository
-import com.matb.ordering.api.models.repositories.ReportRepository
+import com.matb.ordering.api.models.repositories.*
 import com.matb.ordering.api.models.requests.CartStateUpdatingRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -22,15 +19,22 @@ class ChefController (
         private val cartRepository: CartRepository,
         private val chefRepository: ChefRepository,
         private val reportRepository: ReportRepository,
-        private val reportItemRepository: ReportItemRepository
+        private val reportItemRepository: ReportItemRepository,
+        private val vendorRepository: VendorRepository
 ){
     @GetMapping("/{username}/pending")
     fun getAllPendingCart(@PathVariable (value = "username") username: String): ResponseEntity<List<Cart>> {
+        if (!vendorRepository.existsByUsername(username)) {
+            throw UserNotFoundException("vendor", username)
+        }
         return ResponseEntity(cartRepository.findAllByVendorAndState(username, CartState.PENDING), HttpStatus.OK)
     }
 
     @GetMapping("/{username}/inprogress")
     fun getAllInprogressCart(@PathVariable (value = "username") username: String): ResponseEntity<List<Cart>> {
+        if (!vendorRepository.existsByUsername(username)) {
+            throw UserNotFoundException("vendor", username)
+        }
         return ResponseEntity(cartRepository.findAllByVendorAndState(username, CartState.INPROGRESS), HttpStatus.OK)
     }
 

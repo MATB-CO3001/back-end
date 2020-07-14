@@ -6,9 +6,12 @@ import com.matb.ordering.api.models.entities.Cart
 import com.matb.ordering.api.models.entities.CartItem
 import com.matb.ordering.api.models.repositories.*
 import com.matb.ordering.api.models.requests.creation.CartRequest
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.SendTo
+import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -20,11 +23,11 @@ class CartController(
     private val cartItemRepository: CartItemRepository,
     private val foodRepository: FoodRepository,
     private val vendorRepository: VendorRepository,
-    private val customerRepository: CustomerRepository
+    private val customerRepository: CustomerRepository,
+    private val template: SimpMessagingTemplate
 ) {
 
     @PostMapping
-    @SendTo("/api/chef/ahihi")
     fun createCart(@RequestBody cartRequest: CartRequest): ResponseEntity<Cart> {
         var cart = Cart(
                 0,
@@ -39,6 +42,7 @@ class CartController(
             temporarySavedCart.total += food.price * item.quantity
             cartItemRepository.save(CartItem(food,cart,item.quantity))
         }
+        template.convertAndSend("/chef-message", "")
         return ResponseEntity(cartRepository.save(temporarySavedCart),HttpStatus.CREATED)
     }
 

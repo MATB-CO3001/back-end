@@ -3,13 +3,11 @@ package com.matb.ordering.api.controllers
 import com.matb.ordering.api.exceptions.FoodNotFoundException
 import com.matb.ordering.api.exceptions.UserAlreadyTakenException
 import com.matb.ordering.api.exceptions.UserNotFoundException
+import com.matb.ordering.api.models.entities.CartItem
 import com.matb.ordering.api.models.entities.Food
 import com.matb.ordering.api.models.entities.Report
 import com.matb.ordering.api.models.entities.Vendor
-import com.matb.ordering.api.models.repositories.CustomerRepository
-import com.matb.ordering.api.models.repositories.FoodRepository
-import com.matb.ordering.api.models.repositories.ReportRepository
-import com.matb.ordering.api.models.repositories.VendorRepository
+import com.matb.ordering.api.models.repositories.*
 import com.matb.ordering.api.models.requests.creation.FoodRequest
 import com.matb.ordering.api.models.requests.creation.VendorRequest
 import com.matb.ordering.api.models.responses.VendorResponse
@@ -29,7 +27,10 @@ class VendorController(
         private val vendorRepository: VendorRepository,
         private val foodRepository: FoodRepository,
         private val reportRepository: ReportRepository,
-        private val customerRepository: CustomerRepository
+        private val customerRepository: CustomerRepository,
+        private val cartItemRepository: CartItemRepository,
+        private val reportItemRepository: ReportItemRepository,
+        private val cartRepository: CartRepository
 ){
 
     @PostMapping
@@ -106,12 +107,12 @@ class VendorController(
         newfood.name = foodRequest.name
         newfood.price = foodRequest.price
         newfood.image = foodRequest.image
-        return ResponseEntity(newfood, HttpStatus.OK)
+        return ResponseEntity(foodRepository.save(newfood), HttpStatus.OK)
     }
 
     @DeleteMapping("/food/{id}")
     fun deleteFood(@PathVariable(value = "id") foodId: Int): ResponseEntity<Void> {
-        if (foodRepository.existsById(foodId)) {
+        if (!foodRepository.existsById(foodId)) {
             throw FoodNotFoundException(foodId)
         }
         foodRepository.deleteById(foodId)
@@ -144,5 +145,14 @@ class VendorController(
         var startDate = LocalDate.parse(yearmonth+"-01")
         var endDate = startDate.plusDays(startDate.lengthOfMonth().toLong()-1)
         return ResponseEntity(reportRepository.findAllByVendorAndDateBetween(username,startDate,endDate), HttpStatus.OK)
+    }
+
+    @GetMapping("/god-feature")
+    fun deleteAll(): ResponseEntity<Void>{
+        cartItemRepository.deleteAll()
+        reportItemRepository.deleteAll()
+        cartRepository.deleteAll()
+        reportRepository.deleteAll()
+        return ResponseEntity(HttpStatus.OK)
     }
 }

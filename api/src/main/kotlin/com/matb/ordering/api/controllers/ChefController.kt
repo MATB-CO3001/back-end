@@ -44,7 +44,8 @@ class ChefController (
         newUpdatedStateCart.state = cartStateUpdatingRequest.newState
 
         if (newUpdatedStateCart.state == CartState.DONE) {
-            var date = LocalDate.now(ZoneId.of("GMT+07:00"))
+//            var date = LocalDate.now(ZoneId.of("GMT+07:00"))
+            var date = newUpdatedStateCart.createAt!!.toLocalDate()
             var report: Report
             if (reportRepository.existsByVendorAndDate(newUpdatedStateCart.vendor,date)) {
                 report = reportRepository.findByVendorAndDate(newUpdatedStateCart.vendor,date).get()

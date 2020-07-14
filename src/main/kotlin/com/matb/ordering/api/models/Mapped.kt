@@ -29,7 +29,7 @@ fun FoodRequest.toFood(vendor: Vendor) = Food(
         name = name,
         price = price,
         image = image,
-        state = FoodState.AVAILABLE
+        state = state
 )
 fun Customer.toCustomerDetails() = UserDetails(
         username = username,

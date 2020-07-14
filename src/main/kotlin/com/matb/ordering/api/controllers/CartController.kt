@@ -1,11 +1,10 @@
-package com.matb.ordering.api.Controllers
+package com.matb.ordering.api.controllers
 
+import com.matb.ordering.api.exceptions.UserNotFoundException
 import com.matb.ordering.api.models.CartState
 import com.matb.ordering.api.models.entities.Cart
 import com.matb.ordering.api.models.entities.CartItem
-import com.matb.ordering.api.models.repositories.CartItemRepository
-import com.matb.ordering.api.models.repositories.CartRepository
-import com.matb.ordering.api.models.repositories.FoodRepository
+import com.matb.ordering.api.models.repositories.*
 import com.matb.ordering.api.models.requests.creation.CartRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -18,7 +17,9 @@ import java.time.ZoneId
 class CartController(
     private val cartRepository: CartRepository,
     private val cartItemRepository: CartItemRepository,
-    private val foodRepository: FoodRepository
+    private val foodRepository: FoodRepository,
+    private val vendorRepository: VendorRepository,
+    private val customerRepository: CustomerRepository
 ) {
 
     @PostMapping
@@ -41,14 +42,18 @@ class CartController(
 
     @GetMapping("/{username}")
     fun getAllCartDone(@PathVariable (value = "username") username: String): ResponseEntity<List<Cart>> {
+        if (!vendorRepository.existsByUsername(username)) {
+            throw UserNotFoundException("vendor", username)
+        }
         var stateList = setOf(CartState.DONE)
         return ResponseEntity(cartRepository.findAllByVendorAndStateIn(username, stateList), HttpStatus.OK)
     }
     @GetMapping("/customer/{username}")
     fun getAllCarByCustomer(@PathVariable (value = "username") username: String): ResponseEntity<List<Cart>> {
+        if (!customerRepository.existsByUsername(username)) {
+            throw UserNotFoundException("customer", username)
+        }
         return ResponseEntity(cartRepository.findAllByCustomer(username), HttpStatus.OK)
     }
-
-
 
 }

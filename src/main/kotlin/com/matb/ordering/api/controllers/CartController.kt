@@ -8,6 +8,7 @@ import com.matb.ordering.api.models.repositories.*
 import com.matb.ordering.api.models.requests.creation.CartRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.messaging.handler.annotation.SendTo
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -23,6 +24,7 @@ class CartController(
 ) {
 
     @PostMapping
+    @SendTo("/api/chef/ahihi")
     fun createCart(@RequestBody cartRequest: CartRequest): ResponseEntity<Cart> {
         var cart = Cart(
                 0,

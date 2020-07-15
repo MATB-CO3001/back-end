@@ -27,22 +27,25 @@ class CartController(
 ) {
 
     @PostMapping
-    fun createCart(@RequestBody cartRequest: CartRequest): ResponseEntity<Cart> {
-        var cart = Cart(
-                0,
-                cartRequest.customer,
-                cartRequest.vendor,
-                CartState.PENDING,
-                LocalDateTime.now(ZoneId.of("GMT+07:00"))
-        )
-        var temporarySavedCart = cartRepository.save(cart)
+    fun createCart(@RequestBody cartRequest: CartRequest): ResponseEntity<List<Cart>> {
+        var carts = mutableListOf<Cart>()
         for (item in cartRequest.orderedFoodList) {
+            var vendorItem = foodRepository.findById(item.foodId).get().vendor!!.username
+            if (carts.isEmpty() || carts.last().vendor != vendorItem) {
+                carts.add(cartRepository.save(Cart(
+                        0,
+                        cartRequest.customer,
+                        vendorItem,
+                        CartState.PENDING,
+                        LocalDateTime.now(ZoneId.of("GMT+07:00"))
+                )))
+            }
             var food = foodRepository.findById(item.foodId).get()
-            temporarySavedCart.total += food.price * item.quantity
-            cartItemRepository.save(CartItem(food,cart,item.quantity))
+            carts.last().total += food.price * item.quantity
+            cartItemRepository.save(CartItem(food,carts.last(),item.quantity))
         }
         template.convertAndSend("/chef-message", "")
-        return ResponseEntity(cartRepository.save(temporarySavedCart),HttpStatus.CREATED)
+        return ResponseEntity(carts,HttpStatus.CREATED)
     }
 
     @GetMapping("/{username}")
@@ -62,22 +65,26 @@ class CartController(
     }
 
     @PostMapping("/cheat")
-    fun cheatCart(@RequestBody cartRequest: CartRequest): ResponseEntity<Cart> {
-        var cart = Cart(
-                0,
-                cartRequest.customer,
-                cartRequest.vendor,
-                CartState.PENDING,
-                LocalDateTime.now(ZoneId.of("GMT+07:00")).plusDays(-abs(Random().nextLong()%30))
-        )
-        var temporarySavedCart = cartRepository.save(cart)
+    fun cheatCart(@RequestBody cartRequest: CartRequest): ResponseEntity<List<Cart>> {
+        var carts = mutableListOf<Cart>()
+        var cheatingTime = LocalDateTime.now(ZoneId.of("GMT+07:00")).plusDays(-abs(Random().nextLong()%30))
         for (item in cartRequest.orderedFoodList) {
+            var vendorItem = foodRepository.findById(item.foodId).get().vendor!!.username
+            if (carts.isEmpty() || carts.last().vendor != vendorItem) {
+                carts.add(cartRepository.save(Cart(
+                        0,
+                        cartRequest.customer,
+                        vendorItem,
+                        CartState.PENDING,
+                        cheatingTime
+                )))
+            }
             var food = foodRepository.findById(item.foodId).get()
-            temporarySavedCart.total += food.price * item.quantity
-            cartItemRepository.save(CartItem(food,cart,item.quantity))
+            carts.last().total += food.price * item.quantity
+            cartItemRepository.save(CartItem(food,carts.last(),item.quantity))
         }
         template.convertAndSend("/chef-message", "")
-        return ResponseEntity(cartRepository.save(temporarySavedCart),HttpStatus.CREATED)
+        return ResponseEntity(carts,HttpStatus.CREATED)
     }
 
 }

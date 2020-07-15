@@ -6,6 +6,5 @@ import javax.persistence.Id
 
 class CartRequest(
         val orderedFoodList: List<CartItemRequest>,
-        val customer: String,
-        val vendor: String
+        val customer: String
 )

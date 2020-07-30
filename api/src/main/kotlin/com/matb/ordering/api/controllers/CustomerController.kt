@@ -1,4 +1,4 @@
-package com.matb.ordering.api.Controllers
+package com.matb.ordering.api.controllers
 
 import com.matb.ordering.api.models.repositories.CustomerRepository
 import com.matb.ordering.api.models.requests.LoginRequest
@@ -6,28 +6,25 @@ import com.matb.ordering.api.models.requests.SignupRequest
 import com.matb.ordering.api.models.toCustomer
 import com.matb.ordering.api.models.toJwtResponse
 import com.matb.ordering.api.security.jwt.JwtUtils
-import com.matb.ordering.api.security.services.CustomerService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.authentication.AuthenticationManager
-import org.springframework.security.core.userdetails.UsernameNotFoundException
-import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/auth")
 
 class CustomerController (
+        private val encoder: BCryptPasswordEncoder,
         private val customerRepository: CustomerRepository
 ) {
     @Autowired
     lateinit var authenticationManager: AuthenticationManager
     @Autowired
     lateinit var jwtUtils: JwtUtils
-    @Autowired
-    lateinit var encoder:PasswordEncoder
 
     @GetMapping("/test")
     @PreAuthorize("hasRole('USER')")

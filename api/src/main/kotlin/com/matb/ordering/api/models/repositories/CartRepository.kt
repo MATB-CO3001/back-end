@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository
 @Repository
 interface CartRepository : JpaRepository<Cart, Int>{
     fun findAllByState(cartState: CartState): List<Cart>
-    fun findAllByVendorId(vendorId: Int): List<Cart>
-    fun findAllByVendorIdAndState(vendorId: Int, cartState: CartState): List<Cart>
+    fun findAllByVendor(vendor: String): List<Cart>
+    fun findAllByVendorAndStateIn(vendor: String, cartState: Set<CartState>): List<Cart>
+    fun findAllByVendorAndState(username: String, cartState: CartState): List<Cart>
+    fun findAllByCustomer(username: String): List<Cart>
 }

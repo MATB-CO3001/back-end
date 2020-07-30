@@ -6,5 +6,6 @@ import javax.persistence.MappedSuperclass
 
 @MappedSuperclass
 abstract class BaseUserEntity: BaseEntity() {
+    @JsonIgnore
     var token: String = ""
 }
